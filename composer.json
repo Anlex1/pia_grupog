@@ -12,6 +12,7 @@
         "spatie/laravel-permission": "^6.18"
     },
     "require-dev": {
+        "bennett-treptow/laravel-migration-generator": "^4.4",
         "fakerphp/faker": "^1.23",
         "laravel/breeze": "^2.3",
         "laravel/pail": "^1.1",
