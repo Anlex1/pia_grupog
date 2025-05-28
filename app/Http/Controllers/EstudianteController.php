@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Models\TipoProyecto;
+use App\Models\Models\Estudiante;
 use Illuminate\Http\Request;
 
-class TipoProyectoController extends Controller
+class EstudianteController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class TipoProyectoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(TipoProyecto $tipoProyecto)
+    public function show(Estudiante $estudiante)
     {
         //
     }
@@ -42,7 +42,7 @@ class TipoProyectoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(TipoProyecto $tipoProyecto)
+    public function edit(Estudiante $estudiante)
     {
         //
     }
@@ -50,7 +50,7 @@ class TipoProyectoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, TipoProyecto $tipoProyecto)
+    public function update(Request $request, Estudiante $estudiante)
     {
         //
     }
@@ -58,7 +58,7 @@ class TipoProyectoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(TipoProyecto $tipoProyecto)
+    public function destroy(Estudiante $estudiante)
     {
         //
     }
