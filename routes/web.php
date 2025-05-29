@@ -47,9 +47,24 @@ Route::middleware('auth')->group(function () {
  * Rutas de CRUD
  * Todas las opciones del Menú
  */
-Route::middleware(['auth'])->group(function () {
-    Route::resource('tipo-proyectos', TipoProyectoController::class);
+Route::middleware(['auth'])->group(function () {    
     Route::resource('asignaturas', AsignaturaController::class);
+});
+
+Route::middleware(['auth'])->group(function () {
+    // Dashboard
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+    
+    // Rutas CRUD
+    Route::resource('tipo-proyectos', TipoProyectoController::class);
+    Route::resource('usuarios', UsuarioController::class);
+    Route::resource('proyectos', ProyectoController::class);
+    Route::resource('estudiantes', EstudianteController::class);
+    Route::resource('docentes', DocenteController::class);
+    Route::resource('evaluaciones', EvaluacionController::class);
+    Route::resource('asignaturas', AsignaturaController::class);    
 });
 
 

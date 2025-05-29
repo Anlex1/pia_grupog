@@ -9,34 +9,45 @@ use Illuminate\Http\JsonResponse;
 class TipoProyectoController extends Controller
 {
     // Listar todos los tipos de proyecto
-    public function index(): JsonResponse
+    public function index()
     {
         $tipos = TipoProyecto::with('proyectos')->get();
-        return response()->json($tipos);
+        return view('tipo-proyectos.index', compact('tipos'));
+    }
+
+    public function create()
+    {
+        return view('tipo-proyectos.create');
     }
 
     // Crear un nuevo tipo de proyecto
-    public function store(Request $request): JsonResponse
+    public function store(Request $request)
     {
         $request->validate([
             'nombre' => 'required|string|max:100|unique:tiposProyecto,nombre',
             'descripcion' => 'nullable|string|max:255',
         ]);
 
-        $tipo = TipoProyecto::create($request->only(['nombre', 'descripcion']));
+        TipoProyecto::create($request->only(['nombre', 'descripcion']));
 
-        return response()->json($tipo, 201);
+         return redirect()->route('tipo-proyectos.index')
+                         ->with('success', 'Tipo de proyecto creado correctamente');
     }
 
-    // Mostrar un tipo de proyecto específico
-    public function show(TipoProyecto $tipoProyecto): JsonResponse
+    // Mostrar un tipo de proyecto específico (Vista Web)
+    public function show(TipoProyecto $tipoProyecto)
     {
-        $tipoProyecto->load('proyectos');
-        return response()->json($tipoProyecto);
+        return view('tipo-proyectos.show', compact('tipoProyecto'));
+    }
+
+    // Mostrar formulario de edición
+    public function edit(TipoProyecto $tipoProyecto)
+    {
+        return view('tipo-proyectos.edit', compact('tipoProyecto'));
     }
 
     // Actualizar un tipo de proyecto
-    public function update(Request $request, TipoProyecto $tipoProyecto): JsonResponse
+    public function update(Request $request, TipoProyecto $tipoProyecto)
     {
         $request->validate([
             'nombre' => 'required|string|max:100|unique:tiposProyecto,nombre,' . $tipoProyecto->id,
@@ -45,13 +56,15 @@ class TipoProyectoController extends Controller
 
         $tipoProyecto->update($request->only(['nombre', 'descripcion']));
 
-        return response()->json($tipoProyecto);
+         return redirect()->route('tipo-proyectos.index')
+                         ->with('success', 'Tipo de proyecto actualizado correctamente');
     }
 
     // Eliminar un tipo de proyecto
-    public function destroy(TipoProyecto $tipoProyecto): JsonResponse
+    public function destroy(TipoProyecto $tipoProyecto)
     {
         $tipoProyecto->delete();
-        return response()->json(['message' => 'Tipo de proyecto eliminado correctamente']);
+         return redirect()->route('tipo-proyectos.index')
+                         ->with('success', 'Tipo de proyecto eliminado correctamente');
     }
 }
