@@ -21,7 +21,7 @@ class InstitucionController extends Controller
      */
     public function create()
     {
-        //
+        return view('instituciones.create');
     }
 
     /**
@@ -29,15 +29,17 @@ class InstitucionController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+              $request->validate([
+            'codigo'    => 'required|string|max:10|unique:instituciones,codigo',
+            'nombre'    => 'required|string|max:255',
+            'direccion' => 'nullable|string|max:255',
+            'telefono'  => 'nullable|string|max:20',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Institucion $institucion)
-    {
-        //
+        Institucion::create($request->all());
+
+        return redirect()->route('instituciones.index')
+                         ->with('success', 'Institución creada exitosamente.');
     }
 
     /**
@@ -45,7 +47,8 @@ class InstitucionController extends Controller
      */
     public function edit(Institucion $institucion)
     {
-        //
+        return view('instituciones.edit', compact('institucion'));
+
     }
 
     /**
@@ -53,14 +56,26 @@ class InstitucionController extends Controller
      */
     public function update(Request $request, Institucion $institucion)
     {
-        //
+         $request->validate([
+            'nombre'    => 'required|string|max:255',
+            'direccion' => 'nullable|string|max:255',
+            'telefono'  => 'nullable|string|max:20',
+        ]);
+
+        $institucion->update($request->all());
+
+        return redirect()->route('instituciones.index')
+                         ->with('success', 'Institución actualizada exitosamente.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Institucion $institucion)
-    {
-        //
+      {
+        $institucion->delete();
+
+        return redirect()->route('instituciones.index')
+                         ->with('success', 'Institución eliminada.');
     }
 }
