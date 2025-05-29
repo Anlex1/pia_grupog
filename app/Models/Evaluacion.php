@@ -10,7 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Evaluacione
+ * Class Evaluacion
  * 
  * @property int $id
  * @property int $proyecto_id
@@ -23,11 +23,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon|null $updated_at
  * 
  * @property Proyecto $proyecto
- * @property Evaluadore $evaluadore
+ * @property Evaluador $evaluador
  *
  * @package App\Models
  */
-class Evaluacione extends Model
+class Evaluacion extends Model
 {
 	protected $table = 'evaluaciones';
 

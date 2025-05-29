@@ -12,7 +12,8 @@ class InstitucionController extends Controller
      */
     public function index()
     {
-        //
+        $instituciones = Institucion::all();
+        return view('instituciones.index', compact('instituciones'));
     }
 
     /**

@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Evaluadore
+ * Class Evaluador
  * 
  * @property int $id
  * @property string $identificacion
@@ -23,11 +23,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * 
- * @property Collection|Evaluacione[] $evaluaciones
+ * @property Collection|Evaluacion[] $evaluaciones
  *
  * @package App\Models
  */
-class Evaluadore extends Model
+class Evaluador extends Model
 {
 	protected $table = 'evaluadores';
 
