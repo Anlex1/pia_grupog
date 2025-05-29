@@ -9,10 +9,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('instituciones', function (Blueprint $table) {
-            $table->string('codigo', 10)->primary();
+            $table->id();
             $table->string('nombre', 255);
             $table->text('direccion')->nullable();
             $table->string('telefono', 20)->nullable();
+            $table->timestamps();
         });
     }
 

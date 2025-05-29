@@ -5,16 +5,18 @@
  */
 
 namespace App\Models;
-
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Facultad
  * 
- * @property string $codigo
+ * @property int $id
  * @property string $descripcion
- * @property string $institucion_codigo
+ * @property int $institucionId
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * 
  * @property Institucion $institucion
  * @property Collection|Departamento[] $departamentos
@@ -23,23 +25,23 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Facultad extends Model
 {
-	protected $table = 'facultades';
-	protected $primaryKey = 'codigo';
-	public $incrementing = false;
-	public $timestamps = false;
+    use HasFactory;
 
-	protected $fillable = [
-		'descripcion',
-		'institucion_codigo'
-	];
+    protected $table = 'facultades';
 
-	public function institucione()
-	{
-		return $this->belongsTo(Institucione::class, 'institucion_codigo');
-	}
+    protected $fillable = [
+        'descripcion',
+        'institucionId'
+    ];
 
-	public function departamentos()
-	{
-		return $this->hasMany(Departamento::class, 'facultad_codigo');
-	}
+    // Relaciones
+    public function institucion()
+    {
+        return $this->belongsTo(Institucion::class, 'institucionId');
+    }
+
+    public function departamentos()
+    {
+        return $this->hasMany(Departamento::class, 'facultadId');
+    }
 }

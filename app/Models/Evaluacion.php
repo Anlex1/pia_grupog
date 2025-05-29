@@ -1,59 +1,42 @@
 <?php
 
-/**
- * Created by Reliese Model.
- */
-
 namespace App\Models;
 
-use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * Class Evaluacion
- * 
- * @property int $id
- * @property int $proyecto_id
- * @property int $evaluador_id
- * @property Carbon $fecha_evaluacion
- * @property float|null $calificacion
- * @property string|null $observaciones
- * @property string|null $criterios_evaluacion
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * 
- * @property Proyecto $proyecto
- * @property Evaluador $evaluador
- *
- * @package App\Models
- */
 class Evaluacion extends Model
 {
-	protected $table = 'evaluaciones';
+    use HasFactory;
 
-	protected $casts = [
-		'proyecto_id' => 'int',
-		'evaluador_id' => 'int',
-		'fecha_evaluacion' => 'datetime',
-		'calificacion' => 'float'
-	];
+    protected $table = 'evaluaciones';
 
-	protected $fillable = [
-		'proyecto_id',
-		'evaluador_id',
-		'fecha_evaluacion',
-		'calificacion',
-		'observaciones',
-		'criterios_evaluacion'
-	];
+    protected $fillable = [
+        'proyectoId',
+        'evaluadorId',
+        'fechaEvaluacion',
+        'calificacion',
+        'observaciones',
+        'criteriosEvaluacion'
+    ];
 
-	public function proyecto()
-	{
-		return $this->belongsTo(Proyecto::class);
-	}
+    protected $dates = [
+        'fechaEvaluacion'
+    ];
 
-	public function evaluadore()
-	{
-		return $this->belongsTo(Evaluadore::class, 'evaluador_id');
-	}
+    protected $casts = [
+        'calificacion' => 'decimal:2',
+        'criteriosEvaluacion' => 'array'
+    ];
+
+    // Relaciones
+    public function proyecto()
+    {
+        return $this->belongsTo(Proyecto::class, 'proyectoId');
+    }
+
+    public function evaluador()
+    {
+        return $this->belongsTo(Evaluador::class, 'evaluadorId');
+    }
 }

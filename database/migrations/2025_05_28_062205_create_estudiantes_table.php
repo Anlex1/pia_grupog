@@ -9,16 +9,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('estudiantes', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('identificacion', 20)->unique();
             $table->string('nombres', 100);
             $table->string('apellidos', 100);
             $table->string('email', 255)->unique();
             $table->string('telefono', 20)->nullable();
-            $table->string('programa_codigo', 10);
+            $table->unsignedBigInteger('programaId');
             $table->timestamps();
-            
-            $table->foreign('programa_codigo')->references('codigo')->on('programas');
+
+            $table->foreign('programaId')->references('id')->on('programas')->onDelete('cascade');
         });
     }
 

@@ -8,15 +8,18 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('usuario_roles', function (Blueprint $table) {
-            $table->bigInteger('usuario_id');
-            $table->bigInteger('rol_id');
-            $table->timestamp('fecha_asignacion')->default(DB::raw('CURRENT_TIMESTAMP'));
-            
-            $table->primary(['usuario_id', 'rol_id']);
-            
-            $table->foreign('usuario_id')->references('id')->on('usuarios')->onDelete('cascade');
-            $table->foreign('rol_id')->references('id')->on('roles')->onDelete('cascade');
+        Schema::create('usuarioRoles', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('usuarioId');
+            $table->unsignedBigInteger('rolId');
+            $table->timestamp('fechaAsignacion')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamps();
+
+            // Índice único compuesto para evitar duplicados
+            $table->unique(['usuarioId', 'rolId']);
+
+            $table->foreign('usuarioId')->references('id')->on('usuarios')->onDelete('cascade');
+            $table->foreign('rolId')->references('id')->on('roles')->onDelete('cascade');
         });
     }
 

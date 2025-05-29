@@ -9,12 +9,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('asignaturas', function (Blueprint $table) {
-            $table->string('codigo', 10)->primary();
+            $table->id();
             $table->string('descripcion', 255);
             $table->integer('creditos')->nullable();
-            $table->string('programa_codigo', 10);
-            
-            $table->foreign('programa_codigo')->references('codigo')->on('programas');
+            $table->unsignedBigInteger('programaId');
+            $table->timestamps();
+
+            $table->foreign('programaId')->references('id')->on('programas')->onDelete('cascade');
         });
     }
 

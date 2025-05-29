@@ -1,49 +1,39 @@
 <?php
 
-/**
- * Created by Reliese Model.
- */
-
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * Class UsuarioRole
- * 
- * @property int $usuario_id
- * @property int $rol_id
- * @property Carbon $fecha_asignacion
- * 
- * @property Usuario $usuario
- * @property Role $role
- *
- * @package App\Models
- */
-class UsuarioRole extends Model
+class UsuarioRol extends Model
 {
-	protected $table = 'usuario_roles';
-	public $incrementing = false;
-	public $timestamps = false;
+    protected $table = 'usuarioRoles';
 
-	protected $casts = [
-		'usuario_id' => 'int',
-		'rol_id' => 'int',
-		'fecha_asignacion' => 'datetime'
-	];
+    protected $fillable = [
+        'usuarioId',
+        'rolId',
+        'fechaAsignacion'
+    ];
 
-	protected $fillable = [
-		'fecha_asignacion'
-	];
+    protected $dates = [
+        'fechaAsignacion'
+    ];
 
-	public function usuario()
-	{
-		return $this->belongsTo(Usuario::class);
-	}
+    // Relaciones
+    public function usuario()
+    {
+        return $this->belongsTo(Usuario::class, 'usuarioId');
+    }
 
-	public function role()
-	{
-		return $this->belongsTo(Role::class, 'rol_id');
-	}
+    public function rol()
+    {
+        return $this->belongsTo(Rol::class, 'rolId');
+    }
+
+    // Scopes
+    public function scopeActivos($query)
+    {
+        return $query->whereHas('usuario', function($q) {
+            $q->where('activo', true);
+        });
+    }
 }

@@ -1,60 +1,46 @@
 <?php
 
-/**
- * Created by Reliese Model.
- */
-
 namespace App\Models;
 
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * Class Docente
- * 
- * @property int $id
- * @property string $identificacion
- * @property string $nombres
- * @property string $apellidos
- * @property string $email
- * @property string|null $telefono
- * @property string $programa_codigo
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * 
- * @property Programa $programa
- * @property Collection|Asignatura[] $asignaturas
- * @property Collection|ProyectoAsignatura[] $proyecto_asignaturas
- *
- * @package App\Models
- */
 class Docente extends Model
 {
-	protected $table = 'docentes';
+    use HasFactory;
 
-	protected $fillable = [
-		'identificacion',
-		'nombres',
-		'apellidos',
-		'email',
-		'telefono',
-		'programa_codigo'
-	];
+    protected $table = 'docentes';
 
-	public function programa()
-	{
-		return $this->belongsTo(Programa::class, 'programa_codigo');
-	}
+    protected $fillable = [
+        'identificacion',
+        'nombres',
+        'apellidos',
+        'email',
+        'telefono',
+        'programaId'
+    ];
 
-	public function asignaturas()
-	{
-		return $this->belongsToMany(Asignatura::class, 'docente_asignaturas', 'docente_id', 'asignatura_codigo')
-					->withPivot('fecha_asignacion', 'activo');
-	}
+    // Relaciones
+    public function programa()
+    {
+        return $this->belongsTo(Programa::class, 'programaId');
+    }
 
-	public function proyecto_asignaturas()
-	{
-		return $this->hasMany(ProyectoAsignatura::class);
-	}
+    public function asignaturas()
+    {
+        return $this->belongsToMany(Asignatura::class, 'docenteAsignaturas', 'docenteId', 'asignaturaId')
+                    ->withPivot('fechaAsignacion', 'activo')
+                    ->withTimestamps();
+    }
+
+    public function proyectoAsignaturas()
+    {
+        return $this->hasMany(ProyectoAsignatura::class, 'docenteId');
+    }
+
+    // Accessor para nombre completo
+    public function getNombreCompletoAttribute()
+    {
+        return $this->nombres . ' ' . $this->apellidos;
+    }
 }

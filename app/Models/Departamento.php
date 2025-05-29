@@ -1,45 +1,29 @@
 <?php
 
-/**
- * Created by Reliese Model.
- */
-
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * Class Departamento
- * 
- * @property string $codigo
- * @property string $descripcion
- * @property string $facultad_codigo
- * 
- * @property Facultade $facultade
- * @property Collection|Programa[] $programas
- *
- * @package App\Models
- */
 class Departamento extends Model
 {
-	protected $table = 'departamentos';
-	protected $primaryKey = 'codigo';
-	public $incrementing = false;
-	public $timestamps = false;
+    use HasFactory;
 
-	protected $fillable = [
-		'descripcion',
-		'facultad_codigo'
-	];
+    protected $table = 'departamentos';
 
-	public function facultade()
-	{
-		return $this->belongsTo(Facultade::class, 'facultad_codigo');
-	}
+    protected $fillable = [
+        'descripcion',
+        'facultadId'
+    ];
 
-	public function programas()
-	{
-		return $this->hasMany(Programa::class, 'departamento_codigo');
-	}
+    // Relaciones
+    public function facultad()
+    {
+        return $this->belongsTo(Facultad::class, 'facultadId');
+    }
+
+    public function programas()
+    {
+        return $this->hasMany(Programa::class, 'departamentoId');
+    }
 }

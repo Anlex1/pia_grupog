@@ -9,11 +9,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('departamentos', function (Blueprint $table) {
-            $table->string('codigo', 10)->primary();
+            $table->id();
             $table->string('descripcion', 255);
-            $table->string('facultad_codigo', 10);
-            
-            $table->foreign('facultad_codigo')->references('codigo')->on('facultades');
+            $table->unsignedBigInteger('facultadId');
+            $table->timestamps();
+
+            $table->foreign('facultadId')->references('id')->on('facultades')->onDelete('cascade');
         });
     }
 
@@ -22,4 +23,3 @@ return new class extends Migration
         Schema::dropIfExists('departamentos');
     }
 };
-

@@ -9,11 +9,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('programas', function (Blueprint $table) {
-            $table->string('codigo', 10)->primary();
+            $table->id();
             $table->string('descripcion', 255);
-            $table->string('departamento_codigo', 10);
-            
-            $table->foreign('departamento_codigo')->references('codigo')->on('departamentos');
+            $table->unsignedBigInteger('departamentoId');
+            $table->timestamps();
+
+            $table->foreign('departamentoId')->references('id')->on('departamentos')->onDelete('cascade');
         });
     }
 

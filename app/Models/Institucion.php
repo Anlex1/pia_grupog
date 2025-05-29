@@ -6,16 +6,19 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Institucion
  * 
- * @property string $codigo
+ * @property int $id
  * @property string $nombre
  * @property string|null $direccion
  * @property string|null $telefono
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * 
  * @property Collection|Facultad[] $facultades
  *
@@ -23,19 +26,19 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Institucion extends Model
 {
-	protected $table = 'instituciones';
-	protected $primaryKey = 'codigo';
-	public $incrementing = false;
-	public $timestamps = false;
+    use HasFactory;
 
-	protected $fillable = [
-		'nombre',
-		'direccion',
-		'telefono'
-	];
+    protected $table = 'instituciones';
 
-	public function facultades()
-	{
-		return $this->hasMany(Facultade::class, 'institucion_codigo');
-	}
+    protected $fillable = [
+        'nombre',
+        'direccion',
+        'telefono'
+    ];
+
+    // Relaciones
+    public function facultades()
+    {
+        return $this->hasMany(Facultad::class, 'institucionId');
+    }
 }

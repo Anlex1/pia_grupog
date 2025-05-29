@@ -9,22 +9,25 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('estudiante_asignaturas', function (Blueprint $table) {
-            $table->bigInteger('estudiante_id');
-            $table->string('asignatura_codigo', 10);
+        Schema::create('estudianteAsignaturas', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('estudianteId');
+            $table->unsignedBigInteger('asignaturaId');
             $table->string('semestre', 10);
             $table->integer('año');
             $table->string('grupo', 10)->nullable();
-            $table->decimal('nota_final', 3, 2)->nullable();
-            $table->date('fecha_matricula')->default(DB::raw('CURRENT_DATE'));
+            $table->decimal('notaFinal', 3, 2)->nullable();
+            $table->date('fechaMatricula')->default(DB::raw('CURRENT_DATE'));
+            $table->enum('estado', ['matriculado', 'aprobado', 'reprobado', 'retirado'])->default('matriculado');
             $table->timestamps();
-            
-            $table->primary(['estudiante_id', 'asignatura_codigo', 'semestre', 'año']);
-            
-            $table->foreign('estudiante_id')->references('id')->on('estudiantes')->onDelete('cascade');
-            $table->foreign('asignatura_codigo')->references('codigo')->on('asignaturas');
+
+            // Índice único compuesto para evitar duplicados por semestre/año
+            $table->unique(['estudianteId', 'asignaturaId', 'semestre', 'año']);
+
+            $table->foreign('estudianteId')->references('id')->on('estudiantes')->onDelete('cascade');
+            $table->foreign('asignaturaId')->references('id')->on('asignaturas')->onDelete('cascade');
         });
-        
+
         // Agregar columna con tipo ENUM
         DB::statement("ALTER TABLE estudiante_asignaturas ADD COLUMN estado estado_asignatura DEFAULT 'matriculado'");
     }

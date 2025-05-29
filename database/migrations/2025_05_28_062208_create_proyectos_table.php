@@ -10,17 +10,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('proyectos', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('titulo', 255);
             $table->text('descripcion')->nullable();
-            $table->date('fecha_inicio')->nullable();
-            $table->date('fecha_fin')->nullable();
-            $table->string('tipo_proyecto_codigo', 10);
+            $table->date('fechaInicio')->nullable();
+            $table->date('fechaFin')->nullable();
+            $table->unsignedBigInteger('tipoProyectoId');
             $table->timestamps();
-            
-            $table->foreign('tipo_proyecto_codigo')->references('codigo')->on('tipos_proyecto');
+
+            $table->foreign('tipoProyectoId')->references('id')->on('tiposProyecto')->onDelete('cascade');
         });
-        
+
         // Agregar columna con tipo ENUM
         DB::statement("ALTER TABLE proyectos ADD COLUMN estado estado_proyecto DEFAULT 'planificado'");
     }

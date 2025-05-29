@@ -1,39 +1,24 @@
 <?php
 
-/**
- * Created by Reliese Model.
- */
-
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * Class TiposProyecto
- * 
- * @property string $codigo
- * @property string $nombre
- * @property string|null $descripcion
- * 
- * @property Collection|Proyecto[] $proyectos
- *
- * @package App\Models
- */
-class TiposProyecto extends Model
+class TipoProyecto extends Model
 {
-	protected $table = 'tipos_proyecto';
-	protected $primaryKey = 'codigo';
-	public $incrementing = false;
-	public $timestamps = false;
+    use HasFactory;
 
-	protected $fillable = [
-		'nombre',
-		'descripcion'
-	];
+    protected $table = 'tiposProyecto';
 
-	public function proyectos()
-	{
-		return $this->hasMany(Proyecto::class, 'tipo_proyecto_codigo');
-	}
+    protected $fillable = [
+        'nombre',
+        'descripcion'
+    ];
+
+    // Relaciones
+    public function proyectos()
+    {
+        return $this->hasMany(Proyecto::class, 'tipoProyectoId');
+    }
 }

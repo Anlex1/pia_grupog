@@ -1,42 +1,38 @@
 <?php
 
-/**
- * Created by Reliese Model.
- */
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * Class RolPermiso
- * 
- * @property int $rol_id
- * @property int $permiso_id
- * 
- * @property Role $role
- * @property Permiso $permiso
- *
- * @package App\Models
- */
 class RolPermiso extends Model
 {
-	protected $table = 'rol_permisos';
-	public $incrementing = false;
-	public $timestamps = false;
+    protected $table = 'rolPermisos';
 
-	protected $casts = [
-		'rol_id' => 'int',
-		'permiso_id' => 'int'
-	];
+    protected $fillable = [
+        'rolId',
+        'permisoId'
+    ];
 
-	public function role()
-	{
-		return $this->belongsTo(Role::class, 'rol_id');
-	}
+    // Relaciones
+    public function rol()
+    {
+        return $this->belongsTo(Rol::class, 'rolId');
+    }
 
-	public function permiso()
-	{
-		return $this->belongsTo(Permiso::class);
-	}
+    public function permiso()
+    {
+        return $this->belongsTo(Permiso::class, 'permisoId');
+    }
+
+    // Método helper para verificar si un rol tiene un permiso específico
+    public static function rolTienePermiso($rolId, $permisoNombre)
+    {
+        return self::whereHas('rol', function($query) use ($rolId) {
+                $query->where('id', $rolId);
+            })
+            ->whereHas('permiso', function($query) use ($permisoNombre) {
+                $query->where('nombre', $permisoNombre);
+            })
+            ->exists();
+    }
 }

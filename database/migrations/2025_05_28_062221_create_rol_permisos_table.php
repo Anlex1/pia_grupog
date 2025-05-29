@@ -8,14 +8,17 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('rol_permisos', function (Blueprint $table) {
-            $table->bigInteger('rol_id');
-            $table->bigInteger('permiso_id');
-            
-            $table->primary(['rol_id', 'permiso_id']);
-            
-            $table->foreign('rol_id')->references('id')->on('roles')->onDelete('cascade');
-            $table->foreign('permiso_id')->references('id')->on('permisos')->onDelete('cascade');
+        Schema::create('rolPermisos', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('rolId');
+            $table->unsignedBigInteger('permisoId');
+            $table->timestamps();
+
+            // Índice único compuesto para evitar duplicados
+            $table->unique(['rolId', 'permisoId']);
+
+            $table->foreign('rolId')->references('id')->on('roles')->onDelete('cascade');
+            $table->foreign('permisoId')->references('id')->on('permisos')->onDelete('cascade');
         });
     }
 

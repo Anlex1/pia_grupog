@@ -9,17 +9,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('evaluaciones', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->bigInteger('proyecto_id');
-            $table->bigInteger('evaluador_id');
-            $table->timestamp('fecha_evaluacion')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->id();
+            $table->unsignedBigInteger('proyectoId');
+            $table->unsignedBigInteger('evaluadorId');
+            $table->timestamp('fechaEvaluacion')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->decimal('calificacion', 3, 2)->nullable();
             $table->text('observaciones')->nullable();
-            $table->json('criterios_evaluacion')->nullable();
+            $table->json('criteriosEvaluacion')->nullable();
             $table->timestamps();
-            
-            $table->foreign('proyecto_id')->references('id')->on('proyectos')->onDelete('cascade');
-            $table->foreign('evaluador_id')->references('id')->on('evaluadores');
+
+            $table->foreign('proyectoId')->references('id')->on('proyectos')->onDelete('cascade');
+            $table->foreign('evaluadorId')->references('id')->on('evaluadores')->onDelete('cascade');
         });
     }
 
