@@ -2,64 +2,71 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Models\Evaluacion;
+use App\Models\Evaluacion;
+use App\Models\Proyecto;
+use App\Models\Evaluador;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class EvaluacionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
+        $evaluaciones = Evaluacion::with('proyecto', 'evaluador')->get();
+        return response()->json($evaluaciones);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(Request $request): JsonResponse
     {
-        //
+        $request->validate([
+            'proyectoId' => 'required|exists:proyectos,id',
+            'evaluadorId' => 'required|exists:evaluadores,id',
+            'fechaEvaluacion' => 'nullable|date',
+            'calificacion' => 'nullable|numeric|between:0,5',
+            'observaciones' => 'nullable|string',
+            'criteriosEvaluacion' => 'nullable|array'
+        ]);
+
+        $evaluacion = Evaluacion::create($request->all());
+        $evaluacion->load('proyecto', 'evaluador');
+        return response()->json($evaluacion, 201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function show(Evaluacion $evaluacion): JsonResponse
     {
-        //
+        $evaluacion->load('proyecto.tipoProyecto', 'evaluador');
+        return response()->json($evaluacion);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Evaluacion $evaluacion)
+    public function update(Request $request, Evaluacion $evaluacion): JsonResponse
     {
-        //
+        $request->validate([
+            'fechaEvaluacion' => 'nullable|date',
+            'calificacion' => 'nullable|numeric|between:0,5',
+            'observaciones' => 'nullable|string',
+            'criteriosEvaluacion' => 'nullable|array'
+        ]);
+
+        $evaluacion->update($request->all());
+        $evaluacion->load('proyecto', 'evaluador');
+        return response()->json($evaluacion);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Evaluacion $evaluacion)
+    public function destroy(Evaluacion $evaluacion): JsonResponse
     {
-        //
+        $evaluacion->delete();
+        return response()->json(['message' => 'Evaluación eliminada correctamente']);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Evaluacion $evaluacion)
+    public function getByProyecto(Proyecto $proyecto): JsonResponse
     {
-        //
+        $evaluaciones = $proyecto->evaluaciones()->with('evaluador')->get();
+        return response()->json($evaluaciones);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Evaluacion $evaluacion)
+    public function getByEvaluador(Evaluador $evaluador): JsonResponse
     {
-        //
+        $evaluaciones = $evaluador->evaluaciones()->with('proyecto')->get();
+        return response()->json($evaluaciones);
     }
 }

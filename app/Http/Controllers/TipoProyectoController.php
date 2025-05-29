@@ -2,64 +2,56 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Models\TipoProyecto;
+use App\Models\TipoProyecto;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class TipoProyectoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    // Listar todos los tipos de proyecto
+    public function index(): JsonResponse
     {
-        //
+        $tipos = TipoProyecto::with('proyectos')->get();
+        return response()->json($tipos);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    // Crear un nuevo tipo de proyecto
+    public function store(Request $request): JsonResponse
     {
-        //
+        $request->validate([
+            'nombre' => 'required|string|max:100|unique:tiposProyecto,nombre',
+            'descripcion' => 'nullable|string|max:255',
+        ]);
+
+        $tipo = TipoProyecto::create($request->only(['nombre', 'descripcion']));
+
+        return response()->json($tipo, 201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    // Mostrar un tipo de proyecto específico
+    public function show(TipoProyecto $tipoProyecto): JsonResponse
     {
-        //
+        $tipoProyecto->load('proyectos');
+        return response()->json($tipoProyecto);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(TipoProyecto $tipoProyecto)
+    // Actualizar un tipo de proyecto
+    public function update(Request $request, TipoProyecto $tipoProyecto): JsonResponse
     {
-        //
+        $request->validate([
+            'nombre' => 'required|string|max:100|unique:tiposProyecto,nombre,' . $tipoProyecto->id,
+            'descripcion' => 'nullable|string|max:255',
+        ]);
+
+        $tipoProyecto->update($request->only(['nombre', 'descripcion']));
+
+        return response()->json($tipoProyecto);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(TipoProyecto $tipoProyecto)
+    // Eliminar un tipo de proyecto
+    public function destroy(TipoProyecto $tipoProyecto): JsonResponse
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, TipoProyecto $tipoProyecto)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(TipoProyecto $tipoProyecto)
-    {
-        //
+        $tipoProyecto->delete();
+        return response()->json(['message' => 'Tipo de proyecto eliminado correctamente']);
     }
 }

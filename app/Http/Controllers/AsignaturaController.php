@@ -3,63 +3,73 @@
 namespace App\Http\Controllers;
 
 use App\Models\Asignatura;
+use App\Models\Programa;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class AsignaturaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
+        $asignaturas = Asignatura::with('programa.departamento.facultad')->get();
+        return response()->json($asignaturas);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(Request $request): JsonResponse
     {
-        //
+        $request->validate([
+            'descripcion' => 'required|string|max:255',
+            'creditos' => 'nullable|integer|min:1',
+            'programaId' => 'required|exists:programas,id'
+        ]);
+
+        $asignatura = Asignatura::create($request->all());
+        $asignatura->load('programa');
+        return response()->json($asignatura, 201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function show(Asignatura $asignatura): JsonResponse
     {
-        //
+        $asignatura->load([
+            'programa.departamento.facultad',
+            'docentes',
+            'estudiantes' => function($query) {
+                $query->withPivot('semestre', 'año', 'grupo', 'notaFinal', 'estado');
+            }
+        ]);
+        return response()->json($asignatura);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Asignatura $asignatura)
+    public function update(Request $request, Asignatura $asignatura): JsonResponse
     {
-        //
+        $request->validate([
+            'descripcion' => 'required|string|max:255',
+            'creditos' => 'nullable|integer|min:1',
+            'programaId' => 'required|exists:programas,id'
+        ]);
+
+        $asignatura->update($request->all());
+        $asignatura->load('programa');
+        return response()->json($asignatura);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Asignatura $asignatura)
+    public function destroy(Asignatura $asignatura): JsonResponse
     {
-        //
+        $asignatura->delete();
+        return response()->json(['message' => 'Asignatura eliminada correctamente']);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Asignatura $asignatura)
+    public function getByPrograma(Programa $programa): JsonResponse
     {
-        //
+        $asignaturas = $programa->asignaturas()->with('docentes', 'estudiantes')->get();
+        return response()->json($asignaturas);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Asignatura $asignatura)
+    public function getEstudiantes(Asignatura $asignatura): JsonResponse
     {
-        //
+        $estudiantes = $asignatura->estudiantes()
+            ->withPivot('semestre', 'año', 'grupo', 'notaFinal', 'estado', 'fechaMatricula')
+            ->get();
+        return response()->json($estudiantes);
     }
 }

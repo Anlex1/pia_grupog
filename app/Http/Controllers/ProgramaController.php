@@ -2,64 +2,63 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Models\Programa;
+use App\Models\Programa;
+use App\Models\Departamento;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class ProgramaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
+        $programas = Programa::with('departamento.facultad.institucion', 'asignaturas')->get();
+        return response()->json($programas);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(Request $request): JsonResponse
     {
-        //
+        $request->validate([
+            'descripcion' => 'required|string|max:255',
+            'departamentoId' => 'required|exists:departamentos,id'
+        ]);
+
+        $programa = Programa::create($request->all());
+        $programa->load('departamento');
+        return response()->json($programa, 201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function show(Programa $programa): JsonResponse
     {
-        //
+        $programa->load([
+            'departamento.facultad.institucion',
+            'asignaturas',
+            'docentes',
+            'estudiantes'
+        ]);
+        return response()->json($programa);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Programa $programa)
+    public function update(Request $request, Programa $programa): JsonResponse
     {
-        //
+        $request->validate([
+            'descripcion' => 'required|string|max:255',
+            'departamentoId' => 'required|exists:departamentos,id'
+        ]);
+
+        $programa->update($request->all());
+        $programa->load('departamento');
+        return response()->json($programa);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Programa $programa)
+    public function destroy(Programa $programa): JsonResponse
     {
-        //
+        $programa->delete();
+        return response()->json(['message' => 'Programa eliminado correctamente']);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Programa $programa)
+    public function getByDepartamento(Departamento $departamento): JsonResponse
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Programa $programa)
-    {
-        //
+        $programas = $departamento->programas()->with('asignaturas')->get();
+        return response()->json($programas);
     }
 }

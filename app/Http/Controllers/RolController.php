@@ -2,64 +2,56 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Models\Rol;
+use App\Models\Rol;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class RolController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    // Obtener todos los roles con sus relaciones
+    public function index(): JsonResponse
     {
-        //
+        $roles = Rol::with(['usuarios', 'permisos'])->get();
+        return response()->json($roles);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    // Crear un nuevo rol
+    public function store(Request $request): JsonResponse
     {
-        //
+        $request->validate([
+            'nombre' => 'required|string|max:100|unique:roles,nombre',
+            'descripcion' => 'nullable|string|max:255'
+        ]);
+
+        $rol = Rol::create($request->only(['nombre', 'descripcion']));
+
+        return response()->json($rol, 201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    // Mostrar un rol específico
+    public function show(Rol $rol): JsonResponse
     {
-        //
+        $rol->load(['usuarios', 'permisos']);
+        return response()->json($rol);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Rol $rol)
+    // Actualizar un rol existente
+    public function update(Request $request, Rol $rol): JsonResponse
     {
-        //
+        $request->validate([
+            'nombre' => 'required|string|max:100|unique:roles,nombre,' . $rol->id,
+            'descripcion' => 'nullable|string|max:255'
+        ]);
+
+        $rol->update($request->only(['nombre', 'descripcion']));
+
+        return response()->json($rol);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Rol $rol)
+    // Eliminar un rol
+    public function destroy(Rol $rol): JsonResponse
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Rol $rol)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Rol $rol)
-    {
-        //
+        $rol->delete();
+        return response()->json(['message' => 'Rol eliminado correctamente']);
     }
 }

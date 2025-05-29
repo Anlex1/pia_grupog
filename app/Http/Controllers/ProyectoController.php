@@ -2,64 +2,88 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Models\Proyecto;
+use App\Models\Proyecto;
+use App\Models\TipoProyecto;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class ProyectoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
+        $proyectos = Proyecto::with('tipoProyecto', 'asignaturas', 'evaluaciones')->get();
+        return response()->json($proyectos);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(Request $request): JsonResponse
     {
-        //
+        $request->validate([
+            'titulo' => 'required|string|max:255',
+            'descripcion' => 'nullable|string',
+            'fechaInicio' => 'nullable|date',
+            'fechaFin' => 'nullable|date|after_or_equal:fechaInicio',
+            'tipoProyectoId' => 'required|exists:tiposProyecto,id'
+        ]);
+
+        $proyecto = Proyecto::create($request->all());
+        $proyecto->load('tipoProyecto');
+        return response()->json($proyecto, 201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function show(Proyecto $proyecto): JsonResponse
     {
-        //
+        $proyecto->load([
+            'tipoProyecto',
+            'asignaturas.programa',
+            'evaluaciones.evaluador'
+        ]);
+        return response()->json($proyecto);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Proyecto $proyecto)
+    public function update(Request $request, Proyecto $proyecto): JsonResponse
     {
-        //
+        $request->validate([
+            'titulo' => 'required|string|max:255',
+            'descripcion' => 'nullable|string',
+            'fechaInicio' => 'nullable|date',
+            'fechaFin' => 'nullable|date|after_or_equal:fechaInicio',
+            'tipoProyectoId' => 'required|exists:tiposProyecto,id'
+        ]);
+
+        $proyecto->update($request->all());
+        $proyecto->load('tipoProyecto');
+        return response()->json($proyecto);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Proyecto $proyecto)
+    public function destroy(Proyecto $proyecto): JsonResponse
     {
-        //
+        $proyecto->delete();
+        return response()->json(['message' => 'Proyecto eliminado correctamente']);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Proyecto $proyecto)
+    public function asignarAsignatura(Request $request, Proyecto $proyecto): JsonResponse
     {
-        //
+        $request->validate([
+            'asignaturaId' => 'required|exists:asignaturas,id',
+            'docenteId' => 'required|exists:docentes,id',
+            'grupo' => 'nullable|string|max:10',
+            'semestre' => 'nullable|integer',
+            'año' => 'nullable|integer'
+        ]);
+
+        $proyecto->asignaturas()->attach($request->asignaturaId, [
+            'docenteId' => $request->docenteId,
+            'grupo' => $request->grupo,
+            'semestre' => $request->semestre,
+            'año' => $request->año
+        ]);
+
+        return response()->json(['message' => 'Asignatura asignada al proyecto correctamente']);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Proyecto $proyecto)
+    public function getActivos(): JsonResponse
     {
-        //
+        $proyectos = Proyecto::activos()->with('tipoProyecto', 'asignaturas')->get();
+        return response()->json($proyectos);
     }
 }
