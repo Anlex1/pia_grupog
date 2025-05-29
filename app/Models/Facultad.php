@@ -10,18 +10,18 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Facultade
+ * Class Facultad
  * 
  * @property string $codigo
  * @property string $descripcion
  * @property string $institucion_codigo
  * 
- * @property Institucione $institucione
+ * @property Institucion $institucion
  * @property Collection|Departamento[] $departamentos
  *
  * @package App\Models
  */
-class Facultade extends Model
+class Facultad extends Model
 {
 	protected $table = 'facultades';
 	protected $primaryKey = 'codigo';
