@@ -12,10 +12,10 @@ return new class extends Migration
             $table->id();
             $table->string('username', 50)->unique();
             $table->string('email', 255)->unique();
-            $table->timestamp('emailVerifiedAt')->nullable();
+            $table->timestamp('email_verified_at')->nullable();
             $table->string('password', 255);
             $table->boolean('activo')->default(true);
-            $table->string('rememberToken', 100)->nullable();
+            $table->rememberToken();
             $table->timestamps();
         });
     }

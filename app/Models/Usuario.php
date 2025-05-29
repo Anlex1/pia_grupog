@@ -21,11 +21,11 @@ class Usuario extends Authenticatable
 
     protected $hidden = [
         'password',
-        'rememberToken',
+        'remember_token', // Cambiar de 'rememberToken' a 'remember_token'
     ];
 
     protected $casts = [
-        'emailVerifiedAt' => 'datetime',
+        'email_verified_at' => 'datetime', // Cambiar de 'emailVerifiedAt'
         'activo' => 'boolean'
     ];
 

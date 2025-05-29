@@ -29,7 +29,7 @@ return new class extends Migration
         });
 
         // Agregar columna con tipo ENUM
-        DB::statement("ALTER TABLE estudiante_asignaturas ADD COLUMN estado estado_asignatura DEFAULT 'matriculado'");
+        // DB::statement("ALTER TABLE estudiante_asignaturas ADD COLUMN estado estado_asignatura DEFAULT 'matriculado'");
     }
 
     public function down(): void
