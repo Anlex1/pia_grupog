@@ -43,19 +43,19 @@ Este proyecto permite gestionar estudiantes, docentes, asignaturas, proyectos ac
 
 ## 🚀 Cómo iniciar
 
-1. Clona el repositorio:
+- 1. Clona el repositorio:
    ```bash
    git clone https://github.com/Anlex1/pia_grupog
-2.- Abrir la carpeta: "cd Proyecto"
-3.- Correr "composer update" 
-4.- Crear archivo ".env copy" (lo puede copiar del example) 
-5.- Configurar la base de datos en el ".env" 
-6.- Crear la base de datos en pgAdmin4 "proyectos_aula" 
-7.- Correr en consola "php artisan migrate"
-8.- Correr en consola "php artisan key:generate"
-9.- Desde Visual Studio Code: Abrir 2 terminales (una para Artisan y la otra para Node) 
-10.- Arrancar Artisan en un terminal: "php artisan serve" -> http://localhost:8000 
-11.- Arrancar Node en el otro terminal: "npm install" (primero) "npm run dev" (después) 
-12.- Ir al explorador y acceder a la URL http://localhost:8000
+- 2.- Abrir la carpeta: "cd Proyecto"
+- 3.- Correr "composer update" 
+- 4.- Crear archivo ".env copy" (lo puede copiar del example) 
+- 5.- Configurar la base de datos en el ".env" 
+- 6.- Crear la base de datos en pgAdmin4 "proyectos_aula" 
+- 7.- Correr en consola "php artisan migrate"
+- 8.- Correr en consola "php artisan key:generate"
+- 9.- Desde Visual Studio Code: Abrir 2 terminales (una para Artisan y la otra para Node) 
+- 10.- Arrancar Artisan en un terminal: "php artisan serve" -> http://localhost:8000 
+- 11.- Arrancar Node en el otro terminal: "npm install" (primero) "npm run dev" (después) 
+- 12.- Ir al explorador y acceder a la URL http://localhost:8000
 
 
