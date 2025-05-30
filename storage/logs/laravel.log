@@ -1,0 +1,5 @@
+[2025-05-30 13:49:36] production.ERROR: __VSCODE_LARAVEL_STARTUP_ERROR__: The C:\Users\Danilo UD\source\repos\Desarrollo Web\pia_grupog\bootstrap\cache directory must be present and writable. {"exception":"[object] (Error(code: 0): __VSCODE_LARAVEL_STARTUP_ERROR__: The C:\\Users\\Danilo UD\\source\\repos\\Desarrollo Web\\pia_grupog\\bootstrap\\cache directory must be present and writable. at C:\\Users\\Danilo UD\\source\\repos\\Desarrollo Web\\pia_grupog\\vendor\\_laravel_ide\\discover-6f0f1acd77de9f7869cf9462ed4d802b.php:33)
+[stacktrace]
+#0 C:\\Users\\Danilo UD\\source\\repos\\Desarrollo Web\\pia_grupog\\vendor\\_laravel_ide\\discover-6f0f1acd77de9f7869cf9462ed4d802b.php(62): LaravelVsCode::startupError(Object(Exception))
+#1 {main}
+"} 
