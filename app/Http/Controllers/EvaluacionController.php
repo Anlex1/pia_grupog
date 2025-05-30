@@ -6,67 +6,107 @@ use App\Models\Evaluacion;
 use App\Models\Proyecto;
 use App\Models\Evaluador;
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 
 class EvaluacionController extends Controller
 {
-    public function index(): JsonResponse
+    // Método index modificado para mostrar proyectos disponibles para evaluar
+    public function index()
     {
-        $evaluaciones = Evaluacion::with('proyecto', 'evaluador')->get();
-        return response()->json($evaluaciones);
+        // Obtener todos los proyectos con sus relaciones
+        $proyectos = Proyecto::with(['tipoProyecto', 'evaluaciones.evaluador'])
+                            ->orderBy('created_at', 'desc')
+                            ->get();
+        
+        return view('evaluaciones.index', compact('proyectos'));
     }
 
-    public function store(Request $request): JsonResponse
+    // Método para mostrar el formulario de evaluación para un proyecto específico
+    public function create(Request $request)
+    {
+        $proyectoId = $request->get('proyecto_id');
+        
+        if ($proyectoId) {
+            $proyecto = Proyecto::with('tipoProyecto')->findOrFail($proyectoId);
+        } else {
+            $proyecto = null;
+        }
+        
+        $proyectos = Proyecto::all();
+        $evaluadores = Evaluador::all();
+        
+        return view('evaluaciones.create', compact('proyectos', 'evaluadores', 'proyecto'));
+    }
+
+    public function store(Request $request)
     {
         $request->validate([
             'proyectoId' => 'required|exists:proyectos,id',
             'evaluadorId' => 'required|exists:evaluadores,id',
-            'fechaEvaluacion' => 'nullable|date',
-            'calificacion' => 'nullable|numeric|between:0,5',
-            'observaciones' => 'nullable|string',
-            'criteriosEvaluacion' => 'nullable|array'
+            'contenido' => 'nullable|integer|min:1|max:10',
+            'problematizacion' => 'nullable|integer|min:1|max:10',
+            'objetivos' => 'nullable|integer|min:1|max:10',
+            'metodologia' => 'nullable|integer|min:1|max:10',
+            'resultados' => 'nullable|integer|min:1|max:10',
+            'potencial' => 'nullable|integer|min:1|max:10',
+            'interaccionPublico' => 'nullable|integer|min:1|max:10',
+            'creatividad' => 'nullable|integer|min:1|max:10',
+            'innovacion' => 'nullable|integer|min:1|max:10',
+            'concluciones' => 'nullable|string'
         ]);
 
-        $evaluacion = Evaluacion::create($request->all());
-        $evaluacion->load('proyecto', 'evaluador');
-        return response()->json($evaluacion, 201);
+        Evaluacion::create($request->all());
+
+        return redirect()->route('evaluaciones.index')
+                         ->with('success', 'Evaluación creada exitosamente');
     }
 
-    public function show(Evaluacion $evaluacion): JsonResponse
+    public function show(Evaluacion $evaluacion)
     {
-        $evaluacion->load('proyecto.tipoProyecto', 'evaluador');
-        return response()->json($evaluacion);
+        $evaluacion->load(['proyecto', 'evaluador']);
+        return view('evaluaciones.show', compact('evaluacion'));
     }
 
-    public function update(Request $request, Evaluacion $evaluacion): JsonResponse
+    public function edit(Evaluacion $evaluacion)
+    {
+        $proyectos = Proyecto::all();
+        $evaluadores = Evaluador::all();
+        return view('evaluaciones.edit', compact('evaluacion', 'proyectos', 'evaluadores'));
+    }
+
+    public function update(Request $request, Evaluacion $evaluacion)
     {
         $request->validate([
-            'fechaEvaluacion' => 'nullable|date',
-            'calificacion' => 'nullable|numeric|between:0,5',
-            'observaciones' => 'nullable|string',
-            'criteriosEvaluacion' => 'nullable|array'
+            'proyectoId' => 'required|exists:proyectos,id',
+            'evaluadorId' => 'required|exists:evaluadores,id',
+            'contenido' => 'nullable|integer|min:1|max:10',
+            'problematizacion' => 'nullable|integer|min:1|max:10',
+            'objetivos' => 'nullable|integer|min:1|max:10',
+            'metodologia' => 'nullable|integer|min:1|max:10',
+            'resultados' => 'nullable|integer|min:1|max:10',
+            'potencial' => 'nullable|integer|min:1|max:10',
+            'interaccionPublico' => 'nullable|integer|min:1|max:10',
+            'creatividad' => 'nullable|integer|min:1|max:10',
+            'innovacion' => 'nullable|integer|min:1|max:10',
+            'concluciones' => 'nullable|string'
         ]);
 
         $evaluacion->update($request->all());
-        $evaluacion->load('proyecto', 'evaluador');
-        return response()->json($evaluacion);
+
+        return redirect()->route('evaluaciones.index')
+                         ->with('success', 'Evaluación actualizada exitosamente');
     }
 
-    public function destroy(Evaluacion $evaluacion): JsonResponse
+    public function destroy(Evaluacion $evaluacion)
     {
         $evaluacion->delete();
-        return response()->json(['message' => 'Evaluación eliminada correctamente']);
+        return redirect()->route('evaluaciones.index')
+                         ->with('success', 'Evaluación eliminada exitosamente');
     }
 
-    public function getByProyecto(Proyecto $proyecto): JsonResponse
+    // Método para listar todas las evaluaciones realizadas
+    public function listarEvaluaciones()
     {
-        $evaluaciones = $proyecto->evaluaciones()->with('evaluador')->get();
-        return response()->json($evaluaciones);
-    }
-
-    public function getByEvaluador(Evaluador $evaluador): JsonResponse
-    {
-        $evaluaciones = $evaluador->evaluaciones()->with('proyecto')->get();
-        return response()->json($evaluaciones);
+        $evaluaciones = Evaluacion::with(['proyecto', 'evaluador'])->get();
+        return view('evaluaciones.lista', compact('evaluaciones'));
     }
 }
