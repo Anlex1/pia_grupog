@@ -17,6 +17,7 @@
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Facultad</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Institución</th>
@@ -26,24 +27,23 @@
                 <tbody class="bg-white divide-y divide-gray-200">
                     @forelse($departamentos as $departamento)
                     <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $departamento->id }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $departamento->descripcion }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $departamento->facultad->nombre ?? 'N/A' }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $departamento->facultad->descripcion ?? 'N/A' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $departamento->facultad->institucion->nombre ?? 'N/A' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <a href="{{ route('departamentos.show', $departamento->id) }}" 
-                               class="text-blue-600 hover:text-blue-900 mr-3">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                            <a href="{{ route('departamentos.edit', $departamento->id) }}" 
-                               class="text-indigo-600 hover:text-indigo-900 mr-3">
+                            <a href="{{ route('departamentos.edit', $departamento) }}" 
+                               class="text-indigo-600 hover:text-indigo-900 mr-3"
+                               title="Editar">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <form action="{{ route('departamentos.destroy', $departamento->id) }}" method="POST" class="inline">
+                            <form action="{{ route('departamentos.destroy', $departamento) }}" method="POST" class="inline">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" 
                                         class="text-red-600 hover:text-red-900"
-                                        onclick="return confirm('¿Estás seguro de eliminar este departamento?')">
+                                        title="Eliminar"
+                                        onclick="return confirm('¿Estás seguro de eliminar este departamento?\n\nEsta acción no se puede deshacer.')">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </form>
@@ -51,7 +51,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-500">
+                        <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">
                             No hay departamentos registrados
                         </td>
                     </tr>

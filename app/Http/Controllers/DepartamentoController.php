@@ -25,9 +25,12 @@ class DepartamentoController extends Controller
         $request->validate([
             'descripcion' => 'required|string|max:255',
             'facultadId' => 'required|exists:facultades,id'
-        ]);
+        ]);        
 
-        Departamento::create($request->all());
+        Departamento::create([
+            'descripcion' => $request->descripcion,
+            'facultadId' => $request->facultadId,
+        ]);
 
         return redirect()->route('departamentos.index')
                         ->with('success', 'Departamento creado correctamente');
@@ -52,7 +55,10 @@ class DepartamentoController extends Controller
             'facultadId' => 'required|exists:facultades,id'
         ]);
 
-        $departamento->update($request->all());
+        $departamento->update([
+            'descripcion' => $request->descripcion,
+            'facultadId' => $request->facultadId,
+        ]);
 
         return redirect()->route('departamentos.index')
                         ->with('success', 'Departamento actualizado correctamente');

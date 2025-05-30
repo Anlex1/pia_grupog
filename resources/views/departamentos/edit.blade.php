@@ -7,11 +7,21 @@
     <div class="bg-white shadow rounded-lg p-6">
         <h1 class="text-2xl font-bold text-gray-800 mb-6">Editar Departamento</h1>
         
-        <form action="{{ route('departamentos.update', $departamento->id) }}" method="POST">
+        <form action="{{ route('departamentos.update', $departamento) }}" method="POST">
             @csrf
             @method('PUT')
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="mb-4">
+                    <label for="codigo" class="block text-sm font-medium text-gray-700 mb-1">ID</label>
+                    <input type="text" id="codigo" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100"
+                           value="{{ $departamento->id }}"
+                           disabled
+                           readonly>
+                    <p class="mt-1 text-xs text-gray-500">El ID no se puede modificar</p>
+                </div>
+                
                 <div class="mb-4">
                     <label for="descripcion" class="block text-sm font-medium text-gray-700 mb-1">Nombre *</label>
                     <input type="text" id="descripcion" name="descripcion" 
@@ -23,15 +33,16 @@
                     @enderror
                 </div>
                 
-                <div class="mb-4">
+                <div class="mb-4 md:col-span-2">
                     <label for="facultadId" class="block text-sm font-medium text-gray-700 mb-1">Facultad *</label>
                     <select id="facultadId" name="facultadId" 
                             class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                             required>
                         <option value="">Seleccione una facultad</option>
                         @foreach($facultades as $facultad)
-                        <option value="{{ $facultad->id }}" {{ $departamento->facultadId == $facultad->id ? 'selected' : '' }}>
-                            {{ $facultad->nombre }} - {{ $facultad->institucion->nombre }}
+                        <option value="{{ $facultad->id }}" 
+                                {{ (old('facultadId', $departamento->facultadId) == $facultad->id) ? 'selected' : '' }}>
+                            {{ $facultad->descripcion }} - {{ $facultad->institucion->nombre }}
                         </option>
                         @endforeach
                     </select>

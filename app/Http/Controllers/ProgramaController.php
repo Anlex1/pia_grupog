@@ -5,15 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Programa;
 use App\Models\Departamento;
 use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
 
 class ProgramaController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index()
     {
         $programas = Programa::with('departamento.facultad.institucion')->get();
         return view('programas.index', compact('programas'));
@@ -22,7 +20,7 @@ class ProgramaController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): View
+    public function create()
     {
         $departamentos = Departamento::with('facultad.institucion')->get();
         return view('programas.create', compact('departamentos'));
@@ -31,12 +29,11 @@ class ProgramaController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
         $request->validate([
-            'codigo' => 'required|string|max:10|unique:programas',
             'descripcion' => 'required|string|max:255',
-            'departamento_codigo' => 'required|exists:departamentos,codigo'
+            'departamentoId' => 'required|exists:departamentos,id'
         ]);
 
         Programa::create($request->all());
@@ -48,7 +45,7 @@ class ProgramaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Programa $programa): View
+    public function show(Programa $programa)
     {
         $programa->load([
             'departamento.facultad.institucion',
@@ -62,7 +59,7 @@ class ProgramaController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Programa $programa): View
+    public function edit(Programa $programa)
     {
         $departamentos = Departamento::with('facultad.institucion')->get();
         return view('programas.edit', compact('programa', 'departamentos'));
@@ -71,12 +68,11 @@ class ProgramaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Programa $programa): RedirectResponse
+    public function update(Request $request, Programa $programa)
     {
         $request->validate([
-            'codigo' => 'required|string|max:10|unique:programas,codigo,'.$programa->id,
             'descripcion' => 'required|string|max:255',
-            'departamento_codigo' => 'required|exists:departamentos,codigo'
+            'departamentoId' => 'required|exists:departamentos,id'
         ]);
 
         $programa->update($request->all());
@@ -88,7 +84,7 @@ class ProgramaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Programa $programa): RedirectResponse
+    public function destroy(Programa $programa)
     {
         $programa->delete();
 

@@ -30,10 +30,6 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $facultad->descripcion }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $facultad->institucion->nombre ?? 'N/A' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <a href="{{ route('facultades.show', $facultad->id) }}" 
-                               class="text-blue-600 hover:text-blue-900 mr-3">
-                                <i class="fas fa-eye"></i>
-                            </a>
                             <a href="{{ route('facultades.edit', $facultad->id) }}" 
                                class="text-indigo-600 hover:text-indigo-900 mr-3">
                                 <i class="fas fa-edit"></i>
