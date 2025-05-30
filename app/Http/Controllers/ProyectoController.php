@@ -5,85 +5,74 @@ namespace App\Http\Controllers;
 use App\Models\Proyecto;
 use App\Models\TipoProyecto;
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 
 class ProyectoController extends Controller
 {
-    public function index(): JsonResponse
+    public function index()
     {
         $proyectos = Proyecto::with('tipoProyecto', 'asignaturas', 'evaluaciones')->get();
-        return response()->json($proyectos);
+        return view('proyectos.index', compact('proyectos'));
     }
 
-    public function store(Request $request): JsonResponse
+    public function create()
+    {
+        $tiposProyecto = TipoProyecto::all();
+        return view('proyectos.create', compact('tiposProyecto'));
+    }
+
+    public function store(Request $request)
     {
         $request->validate([
             'titulo' => 'required|string|max:255',
             'descripcion' => 'nullable|string',
             'fechaInicio' => 'nullable|date',
             'fechaFin' => 'nullable|date|after_or_equal:fechaInicio',
-            'tipoProyectoId' => 'required|exists:tiposProyecto,id'
+            'tipoProyectoId' => 'required|exists:tiposProyecto,id',
         ]);
 
-        $proyecto = Proyecto::create($request->all());
-        $proyecto->load('tipoProyecto');
-        return response()->json($proyecto, 201);
+        Proyecto::create($request->all());
+
+        return redirect()->route('proyectos.index')
+                         ->with('success', 'Proyecto creado correctamente');
     }
 
-    public function show(Proyecto $proyecto): JsonResponse
+    public function show(Proyecto $proyecto)
     {
         $proyecto->load([
             'tipoProyecto',
             'asignaturas.programa',
-            'evaluaciones.evaluador'
+            'evaluaciones.evaluador',
         ]);
-        return response()->json($proyecto);
+
+        return view('proyectos.show', compact('proyecto'));
     }
 
-    public function update(Request $request, Proyecto $proyecto): JsonResponse
+    public function edit(Proyecto $proyecto)
+    {
+        $tiposProyecto = TipoProyecto::all();
+        return view('proyectos.edit', compact('proyecto', 'tiposProyecto'));
+    }
+
+    public function update(Request $request, Proyecto $proyecto)
     {
         $request->validate([
             'titulo' => 'required|string|max:255',
             'descripcion' => 'nullable|string',
             'fechaInicio' => 'nullable|date',
             'fechaFin' => 'nullable|date|after_or_equal:fechaInicio',
-            'tipoProyectoId' => 'required|exists:tiposProyecto,id'
+            'tipoProyectoId' => 'required|exists:tiposProyecto,id',
         ]);
 
         $proyecto->update($request->all());
-        $proyecto->load('tipoProyecto');
-        return response()->json($proyecto);
+
+        return redirect()->route('proyectos.index')
+                         ->with('success', 'Proyecto actualizado correctamente');
     }
 
-    public function destroy(Proyecto $proyecto): JsonResponse
+    public function destroy(Proyecto $proyecto)
     {
         $proyecto->delete();
-        return response()->json(['message' => 'Proyecto eliminado correctamente']);
-    }
-
-    public function asignarAsignatura(Request $request, Proyecto $proyecto): JsonResponse
-    {
-        $request->validate([
-            'asignaturaId' => 'required|exists:asignaturas,id',
-            'docenteId' => 'required|exists:docentes,id',
-            'grupo' => 'nullable|string|max:10',
-            'semestre' => 'nullable|integer',
-            'año' => 'nullable|integer'
-        ]);
-
-        $proyecto->asignaturas()->attach($request->asignaturaId, [
-            'docenteId' => $request->docenteId,
-            'grupo' => $request->grupo,
-            'semestre' => $request->semestre,
-            'año' => $request->año
-        ]);
-
-        return response()->json(['message' => 'Asignatura asignada al proyecto correctamente']);
-    }
-
-    public function getActivos(): JsonResponse
-    {
-        $proyectos = Proyecto::activos()->with('tipoProyecto', 'asignaturas')->get();
-        return response()->json($proyectos);
+        return redirect()->route('proyectos.index')
+                         ->with('success', 'Proyecto eliminado correctamente');
     }
 }
