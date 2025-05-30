@@ -5,17 +5,22 @@ namespace App\Http\Controllers;
 use App\Models\Docente;
 use App\Models\Programa;
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 
 class DocenteController extends Controller
 {
-    public function index(): JsonResponse
+    public function index()
     {
-        $docentes = Docente::with('programa.departamento.facultad')->get();
-        return response()->json($docentes);
+        $docentes = Docente::with('programa')->get();
+        return view('docentes.index', compact('docentes'));
     }
 
-    public function store(Request $request): JsonResponse
+    public function create()
+    {
+        $programas = Programa::all();
+        return view('docentes.create', compact('programas'));
+    }
+
+    public function store(Request $request)
     {
         $request->validate([
             'identificacion' => 'required|string|max:20|unique:docentes',
@@ -23,26 +28,26 @@ class DocenteController extends Controller
             'apellidos' => 'required|string|max:100',
             'email' => 'required|email|unique:docentes',
             'telefono' => 'nullable|string|max:20',
-            'programaId' => 'required|exists:programas,id'
+            'programaId' => 'required|exists:programas,id',
         ]);
 
-        $docente = Docente::create($request->all());
-        $docente->load('programa');
-        return response()->json($docente, 201);
+        Docente::create($request->all());
+        return redirect()->route('docentes.index')->with('success', 'Docente creado correctamente');
     }
 
-    public function show(Docente $docente): JsonResponse
+    public function show(Docente $docente)
     {
-        $docente->load([
-            'programa.departamento.facultad',
-            'asignaturas' => function($query) {
-                $query->withPivot('fechaAsignacion', 'activo');
-            }
-        ]);
-        return response()->json($docente);
+        $docente->load('programa', 'asignaturas');
+        return view('docentes.show', compact('docente'));
     }
 
-    public function update(Request $request, Docente $docente): JsonResponse
+    public function edit(Docente $docente)
+    {
+        $programas = Programa::all();
+        return view('docentes.edit', compact('docente', 'programas'));
+    }
+
+    public function update(Request $request, Docente $docente)
     {
         $request->validate([
             'identificacion' => 'required|string|max:20|unique:docentes,identificacion,' . $docente->id,
@@ -50,38 +55,16 @@ class DocenteController extends Controller
             'apellidos' => 'required|string|max:100',
             'email' => 'required|email|unique:docentes,email,' . $docente->id,
             'telefono' => 'nullable|string|max:20',
-            'programaId' => 'required|exists:programas,id'
+            'programaId' => 'required|exists:programas,id',
         ]);
 
         $docente->update($request->all());
-        $docente->load('programa');
-        return response()->json($docente);
+        return redirect()->route('docentes.index')->with('success', 'Docente actualizado correctamente');
     }
 
-    public function destroy(Docente $docente): JsonResponse
+    public function destroy(Docente $docente)
     {
         $docente->delete();
-        return response()->json(['message' => 'Docente eliminado correctamente']);
-    }
-
-    public function asignarAsignatura(Request $request, Docente $docente): JsonResponse
-    {
-        $request->validate([
-            'asignaturaId' => 'required|exists:asignaturas,id',
-            'fechaAsignacion' => 'nullable|date'
-        ]);
-
-        $docente->asignaturas()->attach($request->asignaturaId, [
-            'fechaAsignacion' => $request->fechaAsignacion ?? now(),
-            'activo' => true
-        ]);
-
-        return response()->json(['message' => 'Asignatura asignada correctamente']);
-    }
-
-    public function desasignarAsignatura(Docente $docente, $asignaturaId): JsonResponse
-    {
-        $docente->asignaturas()->updateExistingPivot($asignaturaId, ['activo' => false]);
-        return response()->json(['message' => 'Asignatura desasignada correctamente']);
+        return redirect()->route('docentes.index')->with('success', 'Docente eliminado correctamente');
     }
 }
