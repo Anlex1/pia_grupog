@@ -1,5 +1,7 @@
 # pia_grupog
 
+# Danilo Urrego - Angelo Arango
+
 # 📚 Sistema de Gestión de Proyectos Académicos
 
 Este proyecto permite gestionar estudiantes, docentes, asignaturas, proyectos académicos, evaluaciones y roles de usuario dentro de una institución educativa.
@@ -27,7 +29,5 @@ Este proyecto permite gestionar estudiantes, docentes, asignaturas, proyectos ac
 
 1. Clona el repositorio:
    ```bash
-   git clone https://github.com/tuusuario/nombre-del-repo.git
+   git clone https://github.com/Anlex1/pia_grupog
 
-
-# Danilo Urrego - Angelo Arango
