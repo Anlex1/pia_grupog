@@ -86,4 +86,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('permisos', PermisoController::class)->parameters([
         'permisos' => 'permiso'
     ]);
+
+    Route::get('/evaluaciones/lista', [EvaluacionController::class, 'lista'])
+    ->name('evaluaciones.lista');
 });

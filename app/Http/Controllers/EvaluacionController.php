@@ -109,4 +109,13 @@ class EvaluacionController extends Controller
         $evaluaciones = Evaluacion::with(['proyecto', 'evaluador'])->get();
         return view('evaluaciones.lista', compact('evaluaciones'));
     }
+
+    public function lista()
+    {
+        $proyectos = Proyecto::with(['tipoProyecto', 'evaluaciones.evaluador'])
+                            ->orderBy('created_at', 'desc')
+                            ->get();
+
+        return view('evaluaciones.lista', compact('proyectos'));
+    }
 }

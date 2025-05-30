@@ -3,108 +3,105 @@
 @section('title', 'Proyectos para Evaluar')
 
 @section('content')
-<div class="container-fluid px-4">
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h1 class="h3 mb-0 text-gray-800">Proyectos para Evaluar</h1>
-                    <p class="text-muted">Selecciona un proyecto para crear una evaluación</p>
-                </div>
-                <div>
-                    <a href="{{ route('evaluaciones.lista') }}" class="btn btn-info">
-                        <i class="fas fa-list me-2"></i>Ver Evaluaciones Realizadas
-                    </a>
-                </div>
-            </div>
+<div class="container mx-auto px-4 py-8">
+    {{-- <div class="flex justify-between items-center mb-6">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-800">Proyectos para Evaluar</h1>
+            <p class="text-gray-600 text-sm mt-1">Selecciona un proyecto para crear una evaluación</p>
         </div>
-    </div>
+        <a href="{{ route('evaluaciones.lista') }}" 
+           class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+            <i class="fas fa-list mr-2"></i>Ver Evaluaciones Realizadas
+        </a>
+    </div> --}}
 
     @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 relative">
             {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <button type="button" class="absolute top-0 bottom-0 right-0 px-4 py-3" onclick="this.parentElement.style.display='none'">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
     @endif
 
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Lista de Proyectos</h6>
+    <div class="bg-white shadow rounded-lg overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h3 class="text-lg font-semibold text-indigo-600">Lista de Proyectos</h3>
         </div>
-        <div class="card-body">
+        
+        <div class="p-6">
             @if($proyectos->count() > 0)
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead class="table-light">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
                             <tr>
-                                <th>ID</th>
-                                <th>Título</th>
-                                <th>Tipo</th>
-                                <th>Estado</th>
-                                <th>Fecha Inicio</th>
-                                <th>Evaluaciones</th>
-                                <th>Promedio</th>
-                                <th>Acciones</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Título</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha Inicio</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Evaluaciones</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Promedio</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="bg-white divide-y divide-gray-200">
                             @foreach($proyectos as $proyecto)
-                                <tr>
-                                    <td>{{ $proyecto->id }}</td>
-                                    <td>
-                                        <div class="fw-bold">{{ $proyecto->titulo }}</div>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $proyecto->id }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm font-medium text-gray-900">{{ $proyecto->titulo }}</div>
                                         @if($proyecto->descripcion)
-                                            <small class="text-muted">{{ Str::limit($proyecto->descripcion, 50) }}</small>
+                                            <div class="text-sm text-gray-500">{{ Str::limit($proyecto->descripcion, 50) }}</div>
                                         @endif
                                     </td>
-                                    <td>
-                                        <span class="badge bg-secondary">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">
                                             {{ $proyecto->tipoProyecto->nombre ?? 'Sin tipo' }}
                                         </span>
                                     </td>
-                                    <td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
                                         @php
                                             $estadoClass = match($proyecto->estado) {
-                                                'planificado' => 'bg-warning',
-                                                'en_desarrollo' => 'bg-info',
-                                                'terminado' => 'bg-success',
-                                                'evaluado' => 'bg-primary',
-                                                default => 'bg-secondary'
+                                                'planificado' => 'bg-yellow-100 text-yellow-800',
+                                                'en_desarrollo' => 'bg-blue-100 text-blue-800',
+                                                'terminado' => 'bg-green-100 text-green-800',
+                                                'evaluado' => 'bg-indigo-100 text-indigo-800',
+                                                default => 'bg-gray-100 text-gray-800'
                                             };
                                         @endphp
-                                        <span class="badge {{ $estadoClass }}">
+                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full {{ $estadoClass }}">
                                             {{ $proyecto->estadoFormateado() }}
                                         </span>
                                     </td>
-                                    <td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         {{ $proyecto->fechaInicio ? $proyecto->fechaInicio->format('d/m/Y') : 'No definida' }}
                                     </td>
-                                    <td>
-                                        <span class="badge bg-info">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
                                             {{ $proyecto->evaluaciones->count() }} evaluación(es)
                                         </span>
                                     </td>
-                                    <td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
                                         @if($proyecto->promedioEvaluacion())
-                                            <span class="badge bg-success">
+                                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
                                                 {{ $proyecto->promedioEvaluacion() }}/10
                                             </span>
                                         @else
-                                            <span class="text-muted">Sin evaluar</span>
+                                            <span class="text-sm text-gray-500">Sin evaluar</span>
                                         @endif
                                     </td>
-                                    <td>
-                                        <div class="btn-group" role="group">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                        <div class="flex space-x-2">
                                             <a href="{{ route('evaluaciones.create', ['proyecto_id' => $proyecto->id]) }}" 
-                                               class="btn btn-primary btn-sm">
-                                                <i class="fas fa-star me-1"></i>Evaluar
+                                               class="inline-flex items-center px-3 py-1 bg-indigo-600 text-white text-xs rounded hover:bg-indigo-700 transition">
+                                                <i class="fas fa-star mr-1"></i>Evaluar
                                             </a>
                                             
                                             @if($proyecto->evaluaciones->count() > 0)
-                                                <button class="btn btn-info btn-sm" 
-                                                        data-bs-toggle="modal" 
-                                                        data-bs-target="#modalEvaluaciones{{ $proyecto->id }}">
-                                                    <i class="fas fa-eye me-1"></i>Ver
+                                                <button class="inline-flex items-center px-3 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 transition" 
+                                                        onclick="openModal('modalEvaluaciones{{ $proyecto->id }}')">
+                                                    <i class="fas fa-eye mr-1"></i>Ver
                                                 </button>
                                             @endif
                                         </div>
@@ -115,12 +112,12 @@
                     </table>
                 </div>
             @else
-                <div class="text-center py-5">
-                    <div class="mb-3">
-                        <i class="fas fa-folder-open fa-3x text-muted"></i>
+                <div class="text-center py-12">
+                    <div class="mb-4">
+                        <i class="fas fa-folder-open text-gray-400 text-6xl"></i>
                     </div>
-                    <h5 class="text-muted">No hay proyectos disponibles</h5>
-                    <p class="text-muted">No se encontraron proyectos para evaluar.</p>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">No hay proyectos disponibles</h3>
+                    <p class="text-gray-500">No se encontraron proyectos para evaluar.</p>
                 </div>
             @endif
         </div>
@@ -130,60 +127,82 @@
 <!-- Modales para ver evaluaciones -->
 @foreach($proyectos as $proyecto)
     @if($proyecto->evaluaciones->count() > 0)
-        <div class="modal fade" id="modalEvaluaciones{{ $proyecto->id }}" tabindex="-1">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Evaluaciones - {{ $proyecto->titulo }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        @foreach($proyecto->evaluaciones as $evaluacion)
-                            <div class="card mb-3">
-                                <div class="card-header">
+        <div id="modalEvaluaciones{{ $proyecto->id }}" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+            <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+                <div class="flex justify-between items-center pb-3 border-b">
+                    <h3 class="text-lg font-semibold text-gray-900">Evaluaciones - {{ $proyecto->titulo }}</h3>
+                    <button class="text-gray-400 hover:text-gray-600" onclick="closeModal('modalEvaluaciones{{ $proyecto->id }}')">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <div class="mt-4 max-h-96 overflow-y-auto">
+                    @foreach($proyecto->evaluaciones as $evaluacion)
+                        <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                            <div class="flex justify-between items-center mb-3 pb-2 border-b border-gray-200">
+                                <div class="text-sm font-medium text-gray-900">
                                     <strong>Evaluador:</strong> {{ $evaluacion->evaluador->nombreCompleto }}
-                                    <span class="float-end text-muted">
-                                        {{ $evaluacion->created_at->format('d/m/Y H:i') }}
-                                    </span>
                                 </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        @php
-                                            $criterios = [
-                                                'contenido' => 'Contenido',
-                                                'problematizacion' => 'Problematización',
-                                                'objetivos' => 'Objetivos',
-                                                'metodologia' => 'Metodología',
-                                                'resultados' => 'Resultados',
-                                                'potencial' => 'Potencial',
-                                                'interaccionPublico' => 'Interacción Público',
-                                                'creatividad' => 'Creatividad',
-                                                'innovacion' => 'Innovación'
-                                            ];
-                                        @endphp
-                                        @foreach($criterios as $campo => $nombre)
-                                            @if($evaluacion->$campo)
-                                                <div class="col-md-4 mb-2">
-                                                    <small class="text-muted">{{ $nombre }}:</small>
-                                                    <div class="fw-bold">{{ $evaluacion->$campo }}/10</div>
-                                                </div>
-                                            @endif
-                                        @endforeach
-                                    </div>
-                                    @if($evaluacion->concluciones)
-                                        <hr>
-                                        <div>
-                                            <small class="text-muted">Conclusiones:</small>
-                                            <p class="mb-0">{{ $evaluacion->concluciones }}</p>
-                                        </div>
-                                    @endif
+                                <div class="text-sm text-gray-500">
+                                    {{ $evaluacion->created_at->format('d/m/Y H:i') }}
                                 </div>
                             </div>
-                        @endforeach
-                    </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                @php
+                                    $criterios = [
+                                        'contenido' => 'Contenido',
+                                        'problematizacion' => 'Problematización',
+                                        'objetivos' => 'Objetivos',
+                                        'metodologia' => 'Metodología',
+                                        'resultados' => 'Resultados',
+                                        'potencial' => 'Potencial',
+                                        'interaccionPublico' => 'Interacción Público',
+                                        'creatividad' => 'Creatividad',
+                                        'innovacion' => 'Innovación'
+                                    ];
+                                @endphp
+                                @foreach($criterios as $campo => $nombre)
+                                    @if($evaluacion->$campo)
+                                        <div class="text-sm">
+                                            <div class="text-gray-600">{{ $nombre }}:</div>
+                                            <div class="font-semibold text-gray-900">{{ $evaluacion->$campo }}/10</div>
+                                        </div>
+                                    @endif
+                                @endforeach
+                            </div>
+                            
+                            @if($evaluacion->concluciones)
+                                <div class="mt-4 pt-4 border-t border-gray-200">
+                                    <div class="text-sm text-gray-600 mb-1">Conclusiones:</div>
+                                    <p class="text-sm text-gray-900">{{ $evaluacion->concluciones }}</p>
+                                </div>
+                            @endif
+                        </div>
+                    @endforeach
                 </div>
             </div>
         </div>
     @endif
 @endforeach
+
+<script>
+function openModal(modalId) {
+    document.getElementById(modalId).classList.remove('hidden');
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).classList.add('hidden');
+}
+
+// Cerrar modal al hacer clic fuera de él
+document.addEventListener('click', function(event) {
+    const modals = document.querySelectorAll('[id^="modalEvaluaciones"]');
+    modals.forEach(modal => {
+        if (event.target === modal) {
+            modal.classList.add('hidden');
+        }
+    });
+});
+</script>
 @endsection

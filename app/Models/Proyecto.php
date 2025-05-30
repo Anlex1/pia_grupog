@@ -19,6 +19,10 @@ class Proyecto extends Model
         'tipoProyectoId'
     ];
 
+    protected $casts = [
+        'fechaInicio' => 'datetime',
+    ];
+
     protected $dates = [
         'fechaInicio',
         'fechaFin'
@@ -46,5 +50,53 @@ class Proyecto extends Model
     public function scopeActivos($query)
     {
         return $query->where('fechaFin', '>=', now())->orWhereNull('fechaFin');
+    }
+
+    public function estadoFormateado()
+    {
+        switch ($this->estado) {
+            case 0:
+                return 'Pendiente';
+            case 1:
+                return 'Aprobado';
+            case 2:
+                return 'Rechazado';
+            default:
+                return 'Desconocido';
+        }
+    }
+
+    public function promedioEvaluacion()
+    {
+        if ($this->evaluaciones->count() === 0) {
+            return null;
+        }
+
+        // Lista de campos evaluables
+        $criterios = [
+            'contenido',
+            'problematizacion',
+            'objetivos',
+            'metodologia',
+            'resultados',
+            'potencial',
+            'interaccionPublico',
+            'creatividad',
+            'innovacion'
+        ];
+
+        $totalPuntajes = 0;
+        $totalItems = 0;
+
+        foreach ($this->evaluaciones as $evaluacion) {
+            foreach ($criterios as $criterio) {
+                if (!is_null($evaluacion->$criterio)) {
+                    $totalPuntajes += $evaluacion->$criterio;
+                    $totalItems++;
+                }
+            }
+        }
+
+        return $totalItems > 0 ? round($totalPuntajes / $totalItems, 2) : null;
     }
 }

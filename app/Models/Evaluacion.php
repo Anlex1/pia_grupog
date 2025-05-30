@@ -26,7 +26,9 @@ class Evaluacion extends Model
         'concluciones'  
     ];
 
-
+    protected $casts = [
+        'created_at' => 'datetime',
+    ];
 
 
 
