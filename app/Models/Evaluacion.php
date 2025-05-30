@@ -14,20 +14,21 @@ class Evaluacion extends Model
     protected $fillable = [
         'proyectoId',
         'evaluadorId',
-        'fechaEvaluacion',
-        'calificacion',
-        'observaciones',
-        'criteriosEvaluacion'
+        'contenido',
+        'problematizacion',
+        'objetivos',
+        'metodologia',
+        'resultados',
+        'potencial',
+        'interaccionPublico', 
+        'creatividad',
+        'innovacion',
+        'concluciones'  
     ];
 
-    protected $dates = [
-        'fechaEvaluacion'
-    ];
 
-    protected $casts = [
-        'calificacion' => 'decimal:2',
-        'criteriosEvaluacion' => 'array'
-    ];
+
+
 
     // Relaciones
     public function proyecto()
@@ -39,4 +40,5 @@ class Evaluacion extends Model
     {
         return $this->belongsTo(Evaluador::class, 'evaluadorId');
     }
+
 }
