@@ -29,7 +29,7 @@
                         <option value="">Seleccione una facultad</option>
                         @foreach($facultades as $facultad)
                         <option value="{{ $facultad->id }}">
-                            {{ $facultad->nombre }} - {{ $facultad->institucion->nombre }}
+                            {{ $facultad->descripcion }} - {{ $facultad->institucion->nombre }}
                         </option>
                         @endforeach
                     </select>

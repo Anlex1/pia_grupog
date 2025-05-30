@@ -60,7 +60,7 @@ class EstudianteController extends Controller
                       ->orderBy('created_at', 'desc');
             },
             'asignaturas' => function($query) {
-                $query->withPivot('semestre', 'año', 'grupo', 'estado', 'nota_final', 'fecha_matricula')
+                $query->withPivot('semestre', 'año', 'grupo', 'estado', 'notaFinal', 'fechaMatricula')
                       ->orderBy('año', 'desc')
                       ->orderBy('semestre', 'desc');
             }

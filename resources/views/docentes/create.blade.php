@@ -49,8 +49,10 @@
             <select name="programaId" class="w-full border-gray-300 rounded-lg shadow-sm">
                 <option value="">Seleccione</option>
                 @foreach($programas as $programa)
-                    <option value="{{ $programa->id }}" {{ old('programaId') == $programa->id ? 'selected' : '' }}>
-                        {{ $programa->nombre }}
+                    <option value="{{ $programa->id }}"
+                    {{ old('programaId') == $programa->id ? 'selected' : '' }}>
+                        {{ $programa->descripcion }}
+
                     </option>
                 @endforeach
             </select>

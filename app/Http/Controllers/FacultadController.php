@@ -25,12 +25,12 @@ class FacultadController extends Controller
     {
         $request->validate([
             'descripcion' => 'required|string|max:255',
-            'institucion_codigo' => 'required|exists:instituciones,id'
+            'institucionId' => 'required|exists:instituciones,id'
         ]);
 
         Facultad::create([
             'descripcion' => $request->descripcion,
-            'institucionId' => $request->institucion_codigo,
+            'institucionId' => $request-> institucionId,
         ]);
 
         return redirect()->route('facultades.index')
@@ -53,12 +53,12 @@ class FacultadController extends Controller
     {
         $request->validate([
             'descripcion' => 'required|string|max:255',
-            'institucion_codigo' => 'required|exists:instituciones,id'
+            'institucionId' => 'required|exists:instituciones,id'
         ]);
 
         $facultad->update([
             'descripcion' => $request->descripcion,
-            'institucionId' => $request->institucion_codigo,
+            'institucionId' => $request->institucionId,
         ]);
 
         return redirect()->route('facultades.index')

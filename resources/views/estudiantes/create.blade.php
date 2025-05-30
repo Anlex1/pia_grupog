@@ -70,18 +70,18 @@
                 </div>
                 
                 <div class="mb-4">
-                    <label for="programa_id" class="block text-sm font-medium text-gray-700 mb-1">Programa *</label>
-                    <select id="programa_id" name="programa_id" 
+                    <label for="programaId" class="block text-sm font-medium text-gray-700 mb-1">Programa *</label>
+                    <select id="programaId" name="programaId" 
                             class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                             required>
                         <option value="">Seleccione un programa</option>
                         @foreach($programas as $programa)
-                        <option value="{{ $programa->id }}" {{ old('programa_id') == $programa->id ? 'selected' : '' }}>
+                        <option value="{{ $programa->id }}" {{ old('programaId ') == $programa->id ? 'selected' : '' }}>
                             {{ $programa->descripcion }} - {{ $programa->departamento->descripcion }} ({{ $programa->departamento->facultad->descripcion }})
                         </option>
                         @endforeach
                     </select>
-                    @error('programa_id')
+                    @error('programaId')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
