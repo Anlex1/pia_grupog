@@ -187,6 +187,23 @@
                 <span class="inline-block bg-white/20 px-2 py-1 rounded-full text-xs">Programas</span>
             </div>
         </a>
+
+        <!-- Tarjeta Evaluadores -->
+        <a href="{{ route('evaluadores.index') }}" class="bento-card bg-gradient-to-br from-amber-500 to-yellow-500">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h3 class="text-xl font-semibold text-white">Evaluadores</h3>
+                    <p class="text-amber-100 mt-1">Evaluadores</p>
+                </div>
+                <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
+                    <i class="fas fa-chalkboard-teacher text-white text-xl"></i>
+                </div>
+            </div>
+            <div class="mt-4 text-white/80 text-sm">
+                <span class="inline-block bg-white/20 px-2 py-1 rounded-full text-xs">30 registrados</span>
+            </div>
+        </a>
+
     </div>        
 </div>
 @endsection

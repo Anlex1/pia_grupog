@@ -18,7 +18,7 @@ class EvaluadorController extends Controller
     
    public function create()
     {
-    
+        $evaluadores = Evaluador::all();
         return view('evaluadores.create', compact('evaluadores'));
     }
 
