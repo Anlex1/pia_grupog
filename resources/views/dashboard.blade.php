@@ -93,7 +93,7 @@
         </a>
 
         <!-- Tarjeta Asignaturas -->
-        <a href="{{ route('asignaturas.index') }}" class="bento-card bg-gradient-to-br from-violet-500 to-purple-500">
+        <a href="{{ route('asignaturas.index') }}" class="bento-card bg-gradient-to-br from-blue-500 to-cyan-500">
             <div class="flex items-center justify-between">
                 <div>
                     <h3 class="text-xl font-semibold text-white">Asignaturas</h3>
@@ -109,7 +109,7 @@
         </a>
 
         <!-- Tarjeta tipo proyectos -->
-        <a href="{{ route('tipo-proyectos.index') }}" class="bento-card bg-gradient-to-br from-purple-500 to-pink-500">
+        <a href="{{ route('tipo-proyectos.index') }}" class="bento-card bg-gradient-to-br from-indigo-500 to-purple-600">
             <div class="flex items-center justify-between">
                 <div>
                     <h3 class="text-xl font-semibold text-white">Tipos de Proyecto</h3>
@@ -121,6 +121,54 @@
             </div>
             <div class="mt-4 text-white/80 text-sm">
                 <span class="inline-block bg-white/20 px-2 py-1 rounded-full text-xs">Categorías</span>
+            </div>
+        </a>
+
+        <!-- Tarjeta instituciones -->
+        <a href="{{ route('instituciones.index') }}" class="bento-card bg-gradient-to-br from-blue-500 to-cyan-500">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h3 class="text-xl font-semibold text-white">Instituciones</h3>
+                    <p class="text-purple-100 mt-1">Institutos</p>
+                </div>
+                <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
+                    <i class="fas fa-tags text-white text-xl"></i>
+                </div>
+            </div>
+            <div class="mt-4 text-white/80 text-sm">
+                <span class="inline-block bg-white/20 px-2 py-1 rounded-full text-xs"># de Instituciones</span>
+            </div>
+        </a>
+
+        <!-- Tarjeta instituciones -->
+        <a href="{{ route('departamentos.index') }}" class="bento-card bg-gradient-to-br from-purple-500 to-pink-500">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h3 class="text-xl font-semibold text-white">Departamentos</h3>
+                    <p class="text-purple-100 mt-1">departamentos</p>
+                </div>
+                <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
+                    <i class="fas fa-tags text-white text-xl"></i>
+                </div>
+            </div>
+            <div class="mt-4 text-white/80 text-sm">
+                <span class="inline-block bg-white/20 px-2 py-1 rounded-full text-xs">8 departamentos</span>
+            </div>
+        </a>
+
+        <!-- Tarjeta instituciones -->
+        <a href="{{ route('facultades.index') }}" class="bento-card bg-gradient-to-br from-amber-500 to-yellow-500">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h3 class="text-xl font-semibold text-white">Facultades</h3>
+                    <p class="text-purple-100 mt-1">Facultades</p>
+                </div>
+                <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
+                    <i class="fas fa-tags text-white text-xl"></i>
+                </div>
+            </div>
+            <div class="mt-4 text-white/80 text-sm">
+                <span class="inline-block bg-white/20 px-2 py-1 rounded-full text-xs">8 departamentos</span>
             </div>
         </a>
     </div>

@@ -5,35 +5,47 @@ namespace App\Http\Controllers;
 use App\Models\Departamento;
 use App\Models\Facultad;
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 
 class DepartamentoController extends Controller
 {
-    public function index(): JsonResponse
+    public function index()
     {
         $departamentos = Departamento::with('facultad.institucion', 'programas')->get();
-        return response()->json($departamentos);
+        return view('departamentos.index', compact('departamentos'));
     }
 
-    public function store(Request $request): JsonResponse
+    public function create()
+    {
+        $facultades = Facultad::with('institucion')->get();
+        return view('departamentos.create', compact('facultades'));
+    }
+
+    public function store(Request $request)
     {
         $request->validate([
             'descripcion' => 'required|string|max:255',
             'facultadId' => 'required|exists:facultades,id'
         ]);
 
-        $departamento = Departamento::create($request->all());
-        $departamento->load('facultad');
-        return response()->json($departamento, 201);
+        Departamento::create($request->all());
+
+        return redirect()->route('departamentos.index')
+                        ->with('success', 'Departamento creado correctamente');
     }
 
-    public function show(Departamento $departamento): JsonResponse
+    public function show(Departamento $departamento)
     {
         $departamento->load('facultad.institucion', 'programas.asignaturas');
-        return response()->json($departamento);
+        return view('departamentos.show', compact('departamento'));
     }
 
-    public function update(Request $request, Departamento $departamento): JsonResponse
+    public function edit(Departamento $departamento)
+    {
+        $facultades = Facultad::with('institucion')->get();
+        return view('departamentos.edit', compact('departamento', 'facultades'));
+    }
+
+    public function update(Request $request, Departamento $departamento)
     {
         $request->validate([
             'descripcion' => 'required|string|max:255',
@@ -41,19 +53,16 @@ class DepartamentoController extends Controller
         ]);
 
         $departamento->update($request->all());
-        $departamento->load('facultad');
-        return response()->json($departamento);
+
+        return redirect()->route('departamentos.index')
+                        ->with('success', 'Departamento actualizado correctamente');
     }
 
-    public function destroy(Departamento $departamento): JsonResponse
+    public function destroy(Departamento $departamento)
     {
         $departamento->delete();
-        return response()->json(['message' => 'Departamento eliminado correctamente']);
-    }
 
-    public function getByFacultad(Facultad $facultad): JsonResponse
-    {
-        $departamentos = $facultad->departamentos()->with('programas')->get();
-        return response()->json($departamentos);
+        return redirect()->route('departamentos.index')
+                        ->with('success', 'Departamento eliminado correctamente');
     }
 }
