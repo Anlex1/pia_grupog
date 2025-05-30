@@ -5,29 +5,50 @@ namespace App\Http\Controllers;
 use App\Models\Programa;
 use App\Models\Departamento;
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class ProgramaController extends Controller
 {
-    public function index(): JsonResponse
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(): View
     {
-        $programas = Programa::with('departamento.facultad.institucion', 'asignaturas')->get();
-        return response()->json($programas);
+        $programas = Programa::with('departamento.facultad.institucion')->get();
+        return view('programas.index', compact('programas'));
     }
 
-    public function store(Request $request): JsonResponse
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create(): View
+    {
+        $departamentos = Departamento::with('facultad.institucion')->get();
+        return view('programas.create', compact('departamentos'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
+            'codigo' => 'required|string|max:10|unique:programas',
             'descripcion' => 'required|string|max:255',
-            'departamentoId' => 'required|exists:departamentos,id'
+            'departamento_codigo' => 'required|exists:departamentos,codigo'
         ]);
 
-        $programa = Programa::create($request->all());
-        $programa->load('departamento');
-        return response()->json($programa, 201);
+        Programa::create($request->all());
+
+        return redirect()->route('programas.index')
+                        ->with('success', 'Programa creado correctamente');
     }
 
-    public function show(Programa $programa): JsonResponse
+    /**
+     * Display the specified resource.
+     */
+    public function show(Programa $programa): View
     {
         $programa->load([
             'departamento.facultad.institucion',
@@ -35,30 +56,43 @@ class ProgramaController extends Controller
             'docentes',
             'estudiantes'
         ]);
-        return response()->json($programa);
+        return view('programas.show', compact('programa'));
     }
 
-    public function update(Request $request, Programa $programa): JsonResponse
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Programa $programa): View
+    {
+        $departamentos = Departamento::with('facultad.institucion')->get();
+        return view('programas.edit', compact('programa', 'departamentos'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Programa $programa): RedirectResponse
     {
         $request->validate([
+            'codigo' => 'required|string|max:10|unique:programas,codigo,'.$programa->id,
             'descripcion' => 'required|string|max:255',
-            'departamentoId' => 'required|exists:departamentos,id'
+            'departamento_codigo' => 'required|exists:departamentos,codigo'
         ]);
 
         $programa->update($request->all());
-        $programa->load('departamento');
-        return response()->json($programa);
+
+        return redirect()->route('programas.index')
+                        ->with('success', 'Programa actualizado correctamente');
     }
 
-    public function destroy(Programa $programa): JsonResponse
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Programa $programa): RedirectResponse
     {
         $programa->delete();
-        return response()->json(['message' => 'Programa eliminado correctamente']);
-    }
 
-    public function getByDepartamento(Departamento $departamento): JsonResponse
-    {
-        $programas = $departamento->programas()->with('asignaturas')->get();
-        return response()->json($programas);
+        return redirect()->route('programas.index')
+                        ->with('success', 'Programa eliminado correctamente');
     }
 }

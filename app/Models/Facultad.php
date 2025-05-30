@@ -44,4 +44,9 @@ class Facultad extends Model
     {
         return $this->hasMany(Departamento::class, 'facultadId');
     }
+
+    public function getRouteKeyName()
+    {
+        return 'id'; 
+    }
 }
