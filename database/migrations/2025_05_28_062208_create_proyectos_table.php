@@ -20,9 +20,6 @@ return new class extends Migration
 
             $table->foreign('tipoProyectoId')->references('id')->on('tiposProyecto')->onDelete('cascade');
         });
-
-        // Agregar columna con tipo ENUM
-        DB::statement("ALTER TABLE proyectos ADD COLUMN estado estado_proyecto DEFAULT 'planificado'");
     }
 
     public function down(): void
