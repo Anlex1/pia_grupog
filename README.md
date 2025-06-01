@@ -57,8 +57,14 @@ Este proyecto permite gestionar estudiantes, docentes, asignaturas, proyectos ac
 ---
 
 📸 Capturas
+
 ![Incio](assets/inicio.png)
 
+![login](assets/login.png)
+
+![dashboard](assets/dashboard.png)
+
+![proyectos](assets/proyectos.png)
 
 ---
 
