@@ -41,6 +41,27 @@ Este proyecto permite gestionar estudiantes, docentes, asignaturas, proyectos ac
 
 ---
 
+🗂️ Estructura del Proyecto
+
+📁 app
+├── 📁 Models               # Modelos Eloquent (Reliese)
+└── 📁 Http
+    └── 📁 Controllers     # Controladores CRUD
+
+📁 resources
+└── 📁 views               # Vistas Blade (dashboard, login, CRUDs...)
+
+📁 routes
+└── web.php               # Definición de rutas del sistema
+
+---
+
+📸 Capturas
+
+
+
+---
+
 ## 🚀 Cómo iniciar
 
 - 1. Clona el repositorio:
