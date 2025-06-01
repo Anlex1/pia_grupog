@@ -6,6 +6,24 @@ Proyecto Integrador de Aula de los cursos del Programa de Ingeniería de Softwar
 - Base de Datos I
 - Desarrollo Web con nuevas tecnologías
 
+---
+
+## 👥 ¿Quiénes Somos?
+
+Somos un equipo de estudiantes de la Tecnología en Desarrollo de Software del I.U Pascual Bravo comprometidos con el desarrollo de soluciones web modernas y funcionales.
+
+Este proyecto fue desarrollado como parte del curso de Desarrollo Web con nuevas tecnologías, con el propósito de aplicar los conocimientos adquiridos en bases de datos, programación en Laravel, diseño de interfaces y despliegue local.
+
+### 🔧 Equipo de Desarrollo
+
+- **[Danilo Urrego David]**
+  ![Joimar](assets/joimar_urrego.png)
+  
+- **[Angelo Arango Graciano]** – Desarrollo Frontend y vistas Blade
+![Angelo](assets/angelo_arango.png)
+
+---
+
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
