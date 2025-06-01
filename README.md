@@ -17,10 +17,10 @@ Este proyecto fue desarrollado como parte del curso de Desarrollo Web con nuevas
 ### 🔧 Equipo de Desarrollo
 
 - **[Danilo Urrego David]**
-  ![Joimar](assets/joimar_urrego.png)
+<img src="assets/danilo_urrego1.png" alt="Joimar" width="200"/>
   
-- **[Angelo Arango Graciano]** – Desarrollo Frontend y vistas Blade
-![Angelo](assets/angelo_arango.png)
+- **[Angelo Arango Graciano]**
+<img src="assets/angelo_arango.png" alt="Angelo" width="200"/>
 
 ---
 
